@@ -369,7 +369,7 @@ const HomeView = ({ navigate, currentUser }) => {
                 <div className="p-6 flex flex-col flex-1">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">{farmer.farmName}</h3>
                   <p className="text-gray-500 text-sm mb-5 flex items-center gap-1.5"><MapPin className="w-4 h-4 text-gray-400"/> {farmer.city}, {farmer.district}</p>
-                  <Button variant="outline" className="w-full mt-auto border-green-200 text-green-700 bg-green-50 group-hover:bg-green-600 group-hover:text-white transition-colors">Mağazayı Ziyaret Et</Button>
+                  <Button variant="outline" className="w-full mt-auto border-green-200 text-green-700 bg-green-50 group-hover:bg-green-600 hover:bg-green-600 group-hover:text-white transition-colors">Mağazayı Ziyaret Et</Button>
                 </div>
               </div>
             )) : <p className="text-center col-span-full text-gray-500">Onaylı çiftçi bulunmamaktadır.</p>}
