@@ -9,7 +9,7 @@ import {
 
 // GERÇEK ORTAM BAĞLANTISI (Kendi projenizde aşağıdaki 2 satırın yorumunu kaldırın ve alttaki mock pb objesini silin)
 import PocketBase from 'pocketbase';
-const pb = new PocketBase('http://158.180.39.252:8090');
+const pb = new PocketBase('https://delete-newcastle-spending-extended.trycloudflare.com');
 
 
 
