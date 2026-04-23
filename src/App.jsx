@@ -355,7 +355,7 @@ const HomeView = ({ navigate, currentUser }) => {
       {/* Öne Çıkanlar */}
       <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Öne Çıkan Çiftçilerimiz</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Öne Çıkan Çiftliklerimiz</h2>
           <p className="text-gray-500 max-w-2xl mx-auto">Müşterilerimizden en yüksek puanı alan, güvenilir ve onaylı yerel üreticilerimiz.</p>
         </div>
         {isLoading ? <div className="flex justify-center py-10"><Loader2 className="w-10 h-10 animate-spin text-green-600" /></div> : (
@@ -369,7 +369,7 @@ const HomeView = ({ navigate, currentUser }) => {
                 <div className="p-6 flex flex-col flex-1">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">{farmer.farmName}</h3>
                   <p className="text-gray-500 text-sm mb-5 flex items-center gap-1.5"><MapPin className="w-4 h-4 text-gray-400"/> {farmer.city}, {farmer.district}</p>
-                  <Button variant="outline" className="w-full mt-auto border-green-200 text-green-700 bg-green-50 hover:bg-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors">Mağazayı Ziyaret Et</Button>
+                  <Button variant="outline" className="w-full mt-auto border-green-200 text-green-700 bg-green-50 group-hover:bg-green-600 group-hover:text-white transition-colors">Mağazayı Ziyaret Et</Button>
                 </div>
               </div>
             )) : <p className="text-center col-span-full text-gray-500">Onaylı çiftçi bulunmamaktadır.</p>}
@@ -1057,8 +1057,8 @@ const SellerPanel = ({ currentUser, setCurrentUser, showToast }) => {
     const FIVE_DAYS = 5 * 24 * 60 * 60 * 1000;
     
     const deliveredOrders = myOrders.filter(o => o.status === 'Teslim Edildi');
-    const availableOrders = deliveredOrders.filter(o => o.updated && (now - new Date(o.updated).getTime()) >= FIVE_DAYS);
-    const pendingDeliveredOrders = deliveredOrders.filter(o => !o.updated || (now - new Date(o.updated).getTime()) < FIVE_DAYS);
+    const availableOrders = deliveredOrders.filter(o => o.isReviewed || (o.updated && (now - new Date(o.updated).getTime()) >= FIVE_DAYS));
+    const pendingDeliveredOrders = deliveredOrders.filter(o => !o.isReviewed && (!o.updated || (now - new Date(o.updated).getTime()) < FIVE_DAYS));
 
     const grossAvailable = availableOrders.reduce((acc, o) => acc + o.total, 0);
     const netAvailable = grossAvailable * 0.95;
@@ -1194,7 +1194,6 @@ const SellerPanel = ({ currentUser, setCurrentUser, showToast }) => {
                           {order.status === 'Bekliyor' && (
                             <div className="flex flex-col gap-2 w-full md:w-auto">
                               {order.deliveryMethod === 'kargo' && <Button onClick={() => setCargoModalData({isOpen:true, data:order})} className="w-full"><Truck className="w-4 h-4 mr-2" /> Kargoya Ver</Button>}
-                              {order.deliveryMethod === 'gel_al' && <Button onClick={() => markAsGelAl(order)} className="w-full"><CheckCircle className="w-4 h-4 mr-2" /> Teslim Edildi Yap</Button>}
                               <Button variant="danger" onClick={() => setConfirmData({isOpen:true, type:'cancel_order', data:order})} className="w-full"><X className="w-4 h-4 mr-2" /> İptal Et</Button>
                             </div>
                           )}
@@ -1882,14 +1881,33 @@ export default function App() {
     };
   }, [currentUser?.id]);
 
-  const navigate = (view, params = {}) => {
+  const navigate = (view, params = {}, pushToHistory = true) => {
     setCurrentView(view);
-    if (params.farmerId) setSelectedFarmerId(params.farmerId);
-    if (params.role) setRegisterRoleParam(params.role);
-    if (params.searchParams) setSearchParams(params.searchParams);
+    setSelectedFarmerId(params.farmerId || null);
+    setRegisterRoleParam(params.role || 'buyer');
+    setSearchParams(params.searchParams || null);
     window.scrollTo(0, 0);
     setIsMobileMenuOpen(false);
+
+    if (pushToHistory) {
+      window.history.pushState({ view, params }, '', `?view=${view}`);
+    }
   };
+
+  useEffect(() => {
+    const handlePopState = (e) => {
+      if (e.state && e.state.view) {
+        navigate(e.state.view, e.state.params || {}, false);
+      } else {
+        navigate('home', {}, false);
+      }
+    };
+    
+    window.addEventListener('popstate', handlePopState);
+    window.history.replaceState({ view: 'home', params: {} }, '', '?view=home');
+    
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const handleLogout = () => {
     pb.authStore.clear(); 
