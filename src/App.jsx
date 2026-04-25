@@ -7,9 +7,9 @@ import {
   AlertCircle, Info, FileText, HelpCircle, Bell, Wallet, CreditCard, Banknote, ListOrdered, History, Edit
 } from 'lucide-react';
 
-// GERÇEK ORTAM BAĞLANTISI (Kendi projenizde aşağıdaki 2 satırın yorumunu kaldırın ve alttaki mock pb objesini silin)
+// GERÇEK ORTAM BAĞLANTISI
 import PocketBase from 'pocketbase';
-const pb = new PocketBase('https://delete-newcastle-spending-extended.trycloudflare.com');
+const pb = new PocketBase('https://tarladan.duckdns.org/');
 
 
 
