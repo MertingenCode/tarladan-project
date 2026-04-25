@@ -9,7 +9,7 @@ import {
 
 // GERÇEK ORTAM BAĞLANTISI
 import PocketBase from 'pocketbase';
-const pb = new PocketBase('https://tarladan.duckdns.org/');
+const pb = new PocketBase('https://wav-relay-wool-difficulty.trycloudflare.com ');
 
 
 
