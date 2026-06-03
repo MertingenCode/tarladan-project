@@ -7,7 +7,7 @@ import {
   AlertCircle, Info, FileText, HelpCircle, Bell, Wallet, CreditCard, Banknote, ListOrdered, History, Edit
 } from 'lucide-react';
 
-// GERÇEK ORTAM BAĞLANTISI
+// Deneme amaçlı backend normalde .env klasörü
 import PocketBase from 'pocketbase';
 const pb = new PocketBase('https://wav-relay-wool-difficulty.trycloudflare.com');
 
