@@ -9,7 +9,7 @@ import {
 
 // Deneme amaçlı backend normalde .env klasörü
 import PocketBase from 'pocketbase';
-const pb = new PocketBase('https://wav-relay-wool-difficulty.trycloudflare.com');
+const pb = new PocketBase('https://upcoming-resource-white-wool.trycloudflare.com');
 
 
 
